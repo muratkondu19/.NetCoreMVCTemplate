@@ -1,8 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OrnekNetCoreUyg2.Models;
 using OrnekNetCoreUyg2.Models.ViewModels;
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using System.Runtime.Intrinsics.X86;
 using System.Text.Json;
+using static System.Net.WebRequestMethods;
 
 namespace OrnekNetCoreUyg2.Controllers
 {
@@ -247,6 +252,35 @@ namespace OrnekNetCoreUyg2.Controllers
             //Tuple kullanımı
             var userProduct = (product, user); //Derleyici tuple olarak algılar ve view tarafında karşılanması gerekir.
             return View(userProduct);
+        }
+        #endregion
+
+
+        #region Model Binding
+        //Model Binding -> http request ile gelen verilerin ayrıştırılarak ilgili controllerda bulunan action metotlarında uygun bir türe dönüştürülmesi işlemidir.
+        //Bir model oluşturup model propertyleri formdaki input alanlarından doluyorsa verimiz oluşturulan model türüne dönüştürülecektir bu dönüştürülmeye binding denmektedir.
+        //Binding kullanılıyorsa ise data artık ilgili model olarak karşılanır.Bunun içindeki propertyleri yönetmek yeterli olacaktır. 
+        //Kullanıcının form üzerinden girmiş olduğu dataları biz controllerlarda kendimize ait türlerde yakalamak istediğimizde model binding kullanılıyoruz.
+        public IActionResult CreateProduct()
+        {
+            //Burası sayfanın açılmasını sağlayacak, get işlemi yapacak
+            //Açılan sayfa üzerinden yapılacak post işlemi sonucunda gönderilen dataları farklı bir action metodunda yakalanacak
+            //BinaryReader action metodu varsayılan olarak get türündedir.get isteklerini karşılar. bu fonk post put delete isteklerini karşılamaz
+
+            var product = new Product();
+            //View üzerinde yapılan değişiklikler bu nesne üzerine işlenecek
+            //form tetiklendiği zaman üzerine işlenen nesne tetiklenmiş olacak ->post actionuna
+            //post actionuna gelen parametredeki nesne bu nesnenin dolu halidir
+            return View(product);
+        }
+
+        [HttpPost] //metodu post olarak işaretleme, işaretlenmez ise varsayılan get'tir.
+        public IActionResult CreateProduct(Product product) 
+        {
+            //public IActionResult CreateProduct(string id,string txtProductName,string txtQuantity) ->model binding olmadan
+            //Web mimarilerinde bir post/form tetikleniyorsa, işlendiği endpointe içerisindeki inputların değerlerini döndürür
+            //Request neticesinde gelen dataların hepsi action metotlarda parametrelerden yakalanmaktadır. 
+            return View();
         }
         #endregion
     }
