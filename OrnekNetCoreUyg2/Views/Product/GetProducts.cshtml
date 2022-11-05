@@ -1,11 +1,21 @@
-﻿@*
-  
-*@
-@{
-}
+﻿
 
 @*view dosyaları cshtml uzantılı dosyalardır ->razor teknolojisi ->html ve c#'in tek bir dosya üzerinde kullanılması*@
 @*razor->mvc teknolojisine özel, viewın kodlanması için geliştirilmiş bir teknolojidir. *@
 
-
 <h3>Tüm Ürünler</h3>
+
+
+@*VIEWMODEL İLE NESNE KARŞILAMA*@
+
+@*@model OrnekNetCoreUyg2.Models.ViewModels.UserProduct*@
+@*<h4>@Model.Product.ProductName</h4>*@
+@*<h4>@Model.User.Name</h4>*@
+
+@*TUPLE İLE NESNE KARŞIŞAMA*@
+
+@*Gelecek olan nesnenin türünü belirtme*@
+@model (OrnekNetCoreUyg2.Models.Product p,OrnekNetCoreUyg2.Models.User u) 
+<h4>@Model.p.ProductName</h4>
+<h4>@Model.p.Id</h4>
+<h4>@Model.u.Name</h4>

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OrnekNetCoreUyg2.Models;
+using OrnekNetCoreUyg2.Models.ViewModels;
 using System.Collections.Generic;
 using System.Text.Json;
 
@@ -190,7 +191,7 @@ namespace OrnekNetCoreUyg2.Controllers
             //Çünkü tempdata aslında cookie kullanmaktadır.
             //Cookie üzerinde veri taşıdığı için verinin serilize edilmesi gerekmektedir. 
 
-            string data =JsonSerializer.Serialize(products);
+            string data = JsonSerializer.Serialize(products);
             TempData["products"] = data;
 
             #endregion
@@ -208,10 +209,45 @@ namespace OrnekNetCoreUyg2.Controllers
             //var v1 = ViewBag.products;
             //var v2 = ViewData["products"];
             var data = TempData["products"].ToString();
-            List<Product> products =JsonSerializer.Deserialize<List<Product>>("data");
+            List<Product> products = JsonSerializer.Deserialize<List<Product>>("data");
             return View();
         }
 
+        #endregion
+
+
+        #region View'e Tuple Nesne Gönderimi
+        //Tuple-> içerisinde birden fazla değeri, veriyi, nesneyi referans yapabilen bir nesnedir.
+        //Bir product ve user nesnesini bütün olarak tasarlamak istiyorsan viewmodel oluşturulur ve nesnelerin referansları eklenir. 
+        //Bir viewmodel üzerinde birden fazla nesneyi referans yaparak tek bir nesne üzerinden de kullanılaibilir.
+
+
+        public IActionResult GetProducts()
+        {
+            Product product = new Product
+            {
+                Id = 1,
+                ProductName = "ABC Product",
+                Quantity = 5
+            };
+            User user = new User
+            {
+                Id = 1,
+                Name = "Murat",
+                LastName = "Konu"
+            };
+
+            //Viewmodel kullanımı ile birden fazla nesneyi ele alma
+            //UserProduct userProduct = new UserProduct
+            //{
+            //    User = user,
+            //    Product = product,
+            //};
+
+            //Tuple kullanımı
+            var userProduct = (product, user); //Derleyici tuple olarak algılar ve view tarafında karşılanması gerekir.
+            return View(userProduct);
+        }
         #endregion
     }
 }
