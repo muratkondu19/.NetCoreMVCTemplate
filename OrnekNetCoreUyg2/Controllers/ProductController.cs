@@ -8,6 +8,9 @@ namespace OrnekNetCoreUyg2.Controllers
         public IActionResult GetProducts()
         {
             #region Controller & View
+            //Controllerın temel amacı gelen requestleri karşılamak ve requestin gereği olan servisleri tetiklemelidir.İş yapmaz.İşler başka kısımda yapılmaktadır.
+            //Controller işi yapacak yönlendirmede bulunur.
+            //Controller içerisindeki actionlar gerkeli noktalara yönlendirme yapar fakat iş yapmaz. Actionlar iş yapan servisleri çağırır,iş yapmaz.
             //Bir controllera ait viewların hepsi ilgili controller ismi altında bulunması gerekiyor. Views/Product
             //Default olarak ilgili actiona ait bir view oluşturulacaksa, action ile aynı isimde olması gerekmektedir. 
             //View fonksiyonu bu actiona ait cshtml dosyasını tetikleyecek olan fonksiyondur. 
@@ -116,6 +119,25 @@ namespace OrnekNetCoreUyg2.Controllers
 
         #endregion
 
+        #endregion
+
+
+        #region NonAction ve NonController
+        //Bir controller içerisidne oluşturulan metod iş mantığı yürüten bir metot ise request karşılamaktan ziyade iş odaklı çalışıyorsa ona gelen requestleri engellemek gerekir. 
+        public IActionResult Index()
+        {
+            X(); //-> request karşılamaz, iş mantığı amacıyla kullanılır. 
+            //Metodu sadece iş amacıyla kullanıcaksak ilgil metodun action metod olmadığını belirtmemiz gerekir. 
+            return View();
+        }
+
+        [NonAction] //-> Dışarıdan request almazlar. İş amaçlı operasyonel işlemlerde kullanılırlar.   
+        public void X()
+        {
+
+        }
+
+        //Controllerın dışarıdan istek alması istenmiyor ise [NonController] attribute kullanılabilir. 
         #endregion
     }
 }
