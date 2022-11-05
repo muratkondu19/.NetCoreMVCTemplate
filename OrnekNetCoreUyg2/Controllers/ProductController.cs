@@ -1,13 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OrnekNetCoreUyg2.Models;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace OrnekNetCoreUyg2.Controllers
 {
     public class ProductController : Controller
     {
-        public IActionResult GetProducts()
+        #region Controller & View & Model
+        public IActionResult GetProductsAction()
         {
-            #region Controller & View
+
             //Controllerın temel amacı gelen requestleri karşılamak ve requestin gereği olan servisleri tetiklemelidir.İş yapmaz.İşler başka kısımda yapılmaktadır.
             //Controller işi yapacak yönlendirmede bulunur.
             //Controller içerisindeki actionlar gerkeli noktalara yönlendirme yapar fakat iş yapmaz. Actionlar iş yapan servisleri çağırır,iş yapmaz.
@@ -19,19 +22,20 @@ namespace OrnekNetCoreUyg2.Controllers
 
 
             // belirtilen view ismindeki view dosyasını render eder. 
-            //ViewResult result = new ViewResult();
-            //result = View("other");
-            //return result;
-            #endregion
+            ViewResult result = new ViewResult();
+            result = View("other");
+            return result;
+
 
             #region Model
             //Model katamındaki bir nesneyi kullanmak controllerdan modela gitmek anlamına gelmektedir. 
-            Product product = new Product();
+            //Product product = new Product();
 
-            return View();
+            //return View();
             #endregion
 
         }
+        #endregion
 
         #region Action Turler
 
@@ -39,7 +43,7 @@ namespace OrnekNetCoreUyg2.Controllers
         //Response olarak bir View dosyasını (.cshtml) render etmemizi sağlayan action türüdür.
         public ViewResult GetProductViewResult()
         {
-            ViewResult result= View();
+            ViewResult result = View();
             return result;
         }
         #endregion
@@ -60,7 +64,7 @@ namespace OrnekNetCoreUyg2.Controllers
         //client tabanlı tercih edilir.Ajax işlemelrinde
         public JsonResult GetProductJsonResult()
         {
-            JsonResult result= Json(new Product
+            JsonResult result = Json(new Product
             {
                 Id = 5,
                 ProductName = "Çanta",
@@ -76,7 +80,7 @@ namespace OrnekNetCoreUyg2.Controllers
         //Response var fakat result olmamış oluyor
         public EmptyResult GetProductEmptyResult()
         {
-            return new EmptyResult();   
+            return new EmptyResult();
         }
 
         //void ile de boş result döndürülebilir
@@ -124,7 +128,7 @@ namespace OrnekNetCoreUyg2.Controllers
 
         #region NonAction ve NonController
         //Bir controller içerisidne oluşturulan metod iş mantığı yürüten bir metot ise request karşılamaktan ziyade iş odaklı çalışıyorsa ona gelen requestleri engellemek gerekir. 
-        public IActionResult Index()
+        public IActionResult IndexNonAction()
         {
             X(); //-> request karşılamaz, iş mantığı amacıyla kullanılır. 
             //Metodu sadece iş amacıyla kullanıcaksak ilgil metodun action metod olmadığını belirtmemiz gerekir. 
@@ -138,6 +142,76 @@ namespace OrnekNetCoreUyg2.Controllers
         }
 
         //Controllerın dışarıdan istek alması istenmiyor ise [NonController] attribute kullanılabilir. 
+        #endregion
+
+
+
+        #region View Yapılanması
+
+        public IActionResult Index()
+        {
+            var products = new List<Product>
+            {
+                new Product{Id=1,ProductName="A Product",Quantity=10},
+                new Product{Id=2,ProductName="B Product",Quantity=15},
+                new Product{Id=3,ProductName="C Product",Quantity=20},
+            };
+
+            //Controllerdan viewa 4 farklı şekilde veri gönderilebilir. 
+            //Biri model bazlı veri gönderme ve diğerleri veri taşıma kontrolleriyle veri göndermedir. 
+            //Model bazlı göndermede kullanıcıdan veri alabilirken, veri taşıma kontrolleriyle sadeece controllerdan viewa veri gönderme operasyonu gerçekleştirebiliriz. 
+
+            #region Model Bazlı Veri Gönderme
+            //return View(products); //Controllera model bazlı veri gönderme için viewı return etmek ve datayı bildirmek yeterlidir. 
+            #endregion
+
+            #region Veri Taşıma Kontroller
+
+            #region ViewBag
+            //Viewa taşınacak datayı dynamic şekilde tanımlanan bir değişkenle taşımamızı sağlayan veri taşıma kontrolüdür. 
+            ViewBag.products = products;
+            #endregion
+
+            #region ViewData
+            //Actiondaki datayı viewbag gibi viewa taşımaktadır. 
+            //Viewbagten farkı : viewbag datayı dynmaic taşır ve runtimeda türü belli olurken,viewdata boxing yapmaktadır.Viewde unboxing yapıp kullanılır
+            ViewData["produtcs"] = products; //products boxing edilmiş oldu
+            #endregion
+
+            #region TempData
+            //Actiondaki datayı viewbag gibi viewa taşımaktadır. 
+            //Viewdata gibi boxinge tabi tutar ve view üzerinde unboxing yapılmasını bekler. 
+
+            //TempData["products"]=products;
+
+            //Actionlara kendi aralarında yönlendirme yapabiliyoruz,index.cshtml operasyonu bittikten sonra kullanıcıya veri göndermeden başka bir actiona redirct işlemi gerçekleştirilebiliyor
+            //O actiondaki operasyonun da gerçekleştirilmesi sağlanabilmektedir. 
+            //Farklı bir actiona yönlendirme söz konusu olduğunda viewbag ya da viewdata ile veri taşınamazken tempdata ile veriler taşınabilmektedir. 
+            //Çünkü tempdata aslında cookie kullanmaktadır.
+            //Cookie üzerinde veri taşıdığı için verinin serilize edilmesi gerekmektedir. 
+
+            string data =JsonSerializer.Serialize(products);
+            TempData["products"] = data;
+
+            #endregion
+
+            #endregion
+
+            return View();
+            //return RedirectToAction("Index2"); //Mevut controllerda Index2 actionuna yönlendirme yapılmaktadır. Controller adı da yazılabilir.
+
+        }
+
+        public IActionResult Index2()
+        {
+            //TempData ile verinin farklı actiona taşınabildiği gözlemlenecektir.
+            //var v1 = ViewBag.products;
+            //var v2 = ViewData["products"];
+            var data = TempData["products"].ToString();
+            List<Product> products =JsonSerializer.Deserialize<List<Product>>("data");
+            return View();
+        }
+
         #endregion
     }
 }

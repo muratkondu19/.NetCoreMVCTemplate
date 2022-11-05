@@ -1,0 +1,52 @@
+﻿
+@*MODEL BAZLI VERİ ALMA *@
+@*Model bazlı veri geliyor ise viewa gelecek olan verinin modelini bildrmek gerekmektedir.*@
+@*@model keyworduGelen datayıa göre buradaki viewı ayarlamaktadır. *@
+
+@model List<OrnekNetCoreUyg2.Models.Product>
+
+@*Kullanıcıdan veri alırken de bildirilen model üzerinden veri gönderilecektir*@
+
+
+@*Gelecek datayı yakalamak için kullanabilmek için @Model kullanılır.
+Yukarıda @model ile bildirilen türe bürünür ve datayı yakalar*@
+@*@Model, @model'dan ürün almaktadır*@
+
+<ul>
+ @*   @foreach (var product in Model)
+    {
+        <li>@product.ProductName</li>
+    }*@
+</ul>
+
+
+@*VIEWBAG İLE VERİ ALMA*@
+<h3>VIEWBAG</h3>
+<ul>
+    @*dynmaic olduğu ve verilerin türü derleme anında belirlendiği için hızlı bir şekilde deploy aşamasında ulaşım amacıyla tür belirtilmiştir*@
+    @foreach (var product in ViewBag.products as List<OrnekNetCoreUyg2.Models.Product>)
+    {
+        <li>@product.ProductName</li>
+    }
+</ul>
+
+
+@*VIEWDATA İLE VERİ ALMA*@
+<h3>VIEWDATA</h3>
+<ul>
+   
+    @foreach (var product in ViewData["products"] as List<OrnekNetCoreUyg2.Models.Product>)
+    {
+        <li>@product.ProductName</li>
+    }
+</ul>
+
+@*TEMPDATA İLE VERİ ALMA*@
+<h3>TEMPDATA</h3>
+<ul>
+
+    @foreach (var product in TempData["products"] as List<OrnekNetCoreUyg2.Models.Product>)
+    {
+        <li>@product.ProductName</li>
+    }
+</ul>

@@ -12,8 +12,24 @@ namespace OrnekNetCoreUyg2.Controllers
         //Action metot->controllera gelen isteği karşılayan ve gerekli operasyonları gerçekleştiren metotlardır. 
         public IActionResult Index()
         {
+            //View->controllerda üretilen datanın js, css gibi ui tabanlı teknolojilerin kullanılarak görselleştirildiği,render edildiği katmandır. 
+            //.cshtml , html gibi evrensel değildir sadece .netcore üzerinde çalışır,render edilebilir. ,
+            //html içerisine c# kodu yazabildiğimiz teknoloji razor teknolojisidir. 
+            //view dosyaları genellikle Views klasörü altında bulunurlar. 
+            //View klasörü içerisinde bir view dosyası tutulacaksa ilgili actiona karşılık olarak tutulması gerekmektedir. 
+            //Bu sebeple controolera karşılık bir klasör ve o klasör altında actiona karşılık action isminde bir .cshtml uzantılı dosya bulunmalıdır. 
             return View();
         }
-   
+
+        public IActionResult Index2()
+        {
+            return View();
+        }
+
+        public IActionResult Index3()
+        {
+            return View();
+        }
+
     }
 }
