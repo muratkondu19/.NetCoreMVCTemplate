@@ -1,4 +1,6 @@
 ﻿@using OrnekNetCoreUyg2.Extensions
+@*Tüm tag helperların bu view üzerinden kullanımı için entegre edilmesi*@
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 <html>
 <head>
@@ -15,6 +17,62 @@
     }
 
     @Html.CustomTextBox("txtCustomAdi",null,"Adiniz")
+
+    @*
+    TAG HELPER
+    HtmlHelper yerine gelen yeni yapılanmalardır.
+    Daha okunabilir, anlaşılabilir ve kolay geliştirilebilir bir view inşa etmemizi sağlayan ASP.Net Core ile birlikte HtmlHelper yerine gelen yapılardır.
+    TagHelperlar viewlarda ki kod maliyetini oldukça düşürmektedir.
+    HtmlHelperların html nesnelerinin generate edilmesini servera yüklemesinin getirdiği maliyetide ortadan kaldırmaktadır.*@
+
+    @*Form TagHelper*@
+    @*Bir form nesnesi oluşturulurken kullanılmaktadır. *@
+    @*@Html.BeginForm("Index","Product",FormMethod.Post) tagine karşılık gelmektedir.*@
+    <form asp-action="Index" asp-controller="Home" method="post">
+
+        @*Input TagHelper*@
+        @*@Html.TextBox("txtAdi") yerine kullanılmaktadır.*@
+        <input type="text" @*asp-for=""*@ />
+    </form>
+
+    @*Cache TagHelper*@
+    @*Elimizdeki verileri cache işlemine tabi tutabilmekteyiz. *@
+    <cache>
+        Cache : @DateTime.Now
+    </cache>
+    <br />
+    @DateTime.Now
+
+    @*Environment TagHelper*@
+    @*Çalışılan ortama göre farklı kod blokları tetiklenebilmektedir*@
+    <environment names="Devolopment">
+        <p>Development Ortamı</p>
+    </environment>
+    <environment names="Production,Staging">
+        <p>Prod veya staging ortamı</p>
+    </environment>
+
+    @*Image TagHelper*@
+@*    Tarayıcılar static dosyaları local cache üzerinde saklamaktadır
+    Cachelenmiş bir dosya tekrar istenildiği takdirde bunun için servera istek gönderilmez ve lolcal cache üzerinden
+    ilgili dosyanın cache'i gönderilir.Böylece sayfalar ilk açılışlarından sonraki taleplerde daha hızlı yüklenebilmektedir. 
+    Lakin bazen dosya adı değişlmeden içeriği değişebilmektedir. Böyle bir durumla ilgili dosyanın cache'den değil
+    server'dan yüklenmesi gerekmektedir. Bu duruma biz ETag yöntemiyle müdahele ederiz.
+    Asp.Net Core Mvc mimarisinde TagHelpler'lar içerisinde static dosyalara etag yönetimini uygulayabilir ve dosyanın 
+    adı değişmesede içeriği değiştiği takdirde etag üzerinden bu değişikliği fark ederek ilgili dosyanın server^ddan talep edileceği bilinebimektedir.*@ 
+    <img src="" asp-append-version="true"/>
+    @*asp-append-version-> true ise ve sunucuda ilgili resim güncellendi ise etag algoritmasıyla bunu fark edp güncelleme yapmaktadır*@
+
+    @*Partial TagHelper*@
+    <partial name="" />
+    @*name verilen partial view render yapılmaktadır*@
+
+    @*Remove TagHelper*@
+    @*tagHelperi sayfadan remove edebiliriz*@
+    @*@removeTagHelper ile taghelperi sayfa seviyesinde remove edebiliriz*@
+    
+    @*Tag seviyesine oasifleştirme için ! işareti yeterli olmaktadır.*@
+    <!img src="" asp-append-version="true" />
 
 </body>
 </html>
