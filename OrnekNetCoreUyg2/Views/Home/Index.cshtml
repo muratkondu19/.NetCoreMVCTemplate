@@ -2,6 +2,10 @@
 @*Tüm tag helperların bu view üzerinden kullanımı için entegre edilmesi*@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
+@*Oluşturlan custom taghelperi dahil etme*@
+@addTagHelper *, OrnekNetCoreUyg2
+
+
 <html>
 <head>
     <title></title>
@@ -60,11 +64,11 @@
     server'dan yüklenmesi gerekmektedir. Bu duruma biz ETag yöntemiyle müdahele ederiz.
     Asp.Net Core Mvc mimarisinde TagHelpler'lar içerisinde static dosyalara etag yönetimini uygulayabilir ve dosyanın 
     adı değişmesede içeriği değiştiği takdirde etag üzerinden bu değişikliği fark ederek ilgili dosyanın server^ddan talep edileceği bilinebimektedir.*@ 
-    <img src="" asp-append-version="true"/>
+    <img src="https://ngakademi.com/wp-content/uploads/2020/12/net50.jpg" asp-append-version="true"/>
     @*asp-append-version-> true ise ve sunucuda ilgili resim güncellendi ise etag algoritmasıyla bunu fark edp güncelleme yapmaktadır*@
 
     @*Partial TagHelper*@
-    <partial name="" />
+    @*<partial name="" />*@
     @*name verilen partial view render yapılmaktadır*@
 
     @*Remove TagHelper*@
@@ -72,7 +76,12 @@
     @*@removeTagHelper ile taghelperi sayfa seviyesinde remove edebiliriz*@
     
     @*Tag seviyesine oasifleştirme için ! işareti yeterli olmaktadır.*@
-    <!img src="" asp-append-version="true" />
+    <!img src="https://ngakademi.com/wp-content/uploads/2020/12/net50.jpg" asp-append-version="true" />
 
+
+    @*Custom TagHelper*@
+    @*ismini sınıf isimlendirmesinden almaktadır*@
+    <email a="abc" mail="www.google.com.tr" display-name="Google'a git'"></email>
+@*    <mail-gonder></mail-gonder>*@
 </body>
 </html>
