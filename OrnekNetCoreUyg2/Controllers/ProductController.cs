@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OrnekNetCoreUyg2.Models;
 
 namespace OrnekNetCoreUyg2.Controllers
 {
@@ -14,11 +15,14 @@ namespace OrnekNetCoreUyg2.Controllers
 
 
             // belirtilen view ismindeki view dosyasını render eder. 
-            ViewResult result = new ViewResult();
-            result = View("other");
-            return result;
+            //ViewResult result = new ViewResult();
+            //result = View("other");
+            //return result;
 
+            //Model katamındaki bir nesneyi kullanmak controllerdan modela gitmek anlamına gelmektedir. 
+            Product product = new Product();
 
+            return View();
 
 
 
