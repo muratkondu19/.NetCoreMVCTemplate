@@ -351,5 +351,53 @@ namespace OrnekNetCoreUyg2.Controllers
 
         #endregion
         #endregion
+
+        #region Kullanıcıdan Veri Alma Yöntemleri - QueryString Üzerinden Veri Alma
+        //QueryString-> webte belirli verilerde gizli formatta taşıma tercih edilir, bazı veriler güvenlik gerektirmez ve url üzerinde hızlı şekilde taşınır,amaç hızlı şekilde servise eriştirmek
+        //url/url?id=2 -> ? kısmı querystring değeridir
+        //querystring kullanıcıdan veri almaktan ziyade ilgili uygulamanın istek yapacağı servise bu isteklerde hızlı bir şekilde veri taşır, bunu yazılım kullanır, kullanıcıdan da veri alınabilir
+        //query string yapılan requestin türü her ne olursa olsun, querystring değerleri taşınabilir. 
+
+
+        public IActionResult GetUserProduct()
+        {
+            return View();
+        }
+
+        public IActionResult CreateUserProduct()
+        {
+            return View();
+        }
+
+        #region Parametre ile değerleri alma
+        //public IActionResult VeriAlUserProduct(string deger,string olcu)
+        //{
+        //    //query string değerlerini yakalamak için parametre üzerinden ilgli querystringe denk gelen bir parametre tanımlanabilir .
+        //    //girilen parametreler birden fazla olaiblir bunun için & operatörü kullanılabilir ve parametre olarak ifade de tanımlanmalıdır
+        //    return View();
+        //}
+        #endregion
+
+        #region Request içerisinden querystring değerlerini okuma
+        //Gelen değerleri parametre tanımlayarak değil requestin içerisine girerek querystring değerlerini okuyabiliriz
+        //public IActionResult VeriAlUserProduct()
+        //{
+        //    var queryString = Request.QueryString; //request yapılan endpointte query styring parametresi eklenmiş mi eklenmemiş mi bununla ilgil bilgi verir
+        //    var a = Request.Query["a"].ToString(); //query üzerinden querystring değerlerini yakalayabiliriz
+        //    var b = Request.Query["b"].ToString();
+        //    return View();
+        //}
+        //}
+        #endregion
+
+        #region Model üzerinden eşleştirme
+        //Querystring parametrelerine karşılık gelen birer property isimleri tanımlayarak da değerleri ele alabliriz.
+        public IActionResult VeriAlUserProduct(Data data)
+        {
+            //prop isimlerine göre querystrign göndererek değerler data üzerinden yakalanabilir.
+            return View();
+        }
+        #endregion
+        #endregion
     }
 }
