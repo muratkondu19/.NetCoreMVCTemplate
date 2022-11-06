@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using OrnekNetCoreUyg2.Models;
 using OrnekNetCoreUyg2.Models.ViewModels;
 using System;
@@ -275,13 +276,80 @@ namespace OrnekNetCoreUyg2.Controllers
         }
 
         [HttpPost] //metodu post olarak işaretleme, işaretlenmez ise varsayılan get'tir.
-        public IActionResult CreateProduct(Product product) 
+        public IActionResult CreateProduct(Product product)
         {
             //public IActionResult CreateProduct(string id,string txtProductName,string txtQuantity) ->model binding olmadan
             //Web mimarilerinde bir post/form tetikleniyorsa, işlendiği endpointe içerisindeki inputların değerlerini döndürür
             //Request neticesinde gelen dataların hepsi action metotlarda parametrelerden yakalanmaktadır. 
             return View();
         }
+        #endregion
+
+
+        #region Kullanıcıdan Veri Alma Yöntemleri - Form Üzerinden Veri Alma
+        //form üzerinden post ve get türünde veri alabiliyoruz
+        //kullanıcıdan veri alınacaksa post kullanılması / verinin post edilmesi gerekir
+        public IActionResult GetProduct2()
+        {
+            return View();
+        }
+
+        #region IFormCollection Kullanımı
+        //[HttpPost]
+        //public IActionResult VeriAl(IFormCollection datas)
+        //{
+        //    //IFormCollection ->Microsoft.AspNetCore.Http ile gelen bir arayüzdür, bunun sayesinde post edilen formun içerisindeki input nesnelerinin dataları yakalanabilmektedir
+        //    var value1 = datas["txtValue1"].ToString(); //name değerlerine göre input deperlerini ele alma
+        //    var value2 = datas["txtValue2"].ToString();
+        //    var value3 = datas["txtValue3"].ToString();
+        //    return View();
+        //}
+        #endregion
+
+        #region Parametreler ile veri alma 
+        //[HttpPost]
+        //public IActionResult VeriAl(string txtValue1, string txtValue2, string txtValue3)
+        //{
+        //    var value1 = txtValue1; //name değerlerine göre input deperlerini ele alma
+        //    var value2 = txtValue2;
+        //    var value3 = txtValue3;
+        //    return View();
+        //} 
+        #endregion
+
+        #region Model tanımlayarak değerleri alma
+        //formdan gelecek olan input propertlerina karşılık bir class tanımlarsak 
+        public class Data
+        {
+            public string txtValue1 { get; set; }
+            public string txtValue2 { get; set; }
+            public string txtValue3 { get; set; }
+        }
+
+        //parametreleri gelecek olan post ile yakalamak isteniyorsa Model kullanılabilir 
+        [HttpPost]
+        //public IActionResult VeriAl(Data data)
+        //{
+        //    var value1 = data.txtValue1;
+        //    var value2 = data.txtValue2;
+        //    var value3 = data.txtValue3;
+        //    return View();
+        //}
+        #endregion
+
+        #region Model Binding ile veri alma
+        //view'e model belirlemek gerekmektedir. ->Product belirlenmiş
+        //TagHelpers kullanarak asp-for ile belirleme yapılır 
+        [HttpPost]
+        public IActionResult VeriAl(Product data)
+        {
+            var value1 = data.Id;
+            var value2 = data.ProductName;
+            var value3 = data.Quantity;
+            return View();
+        }
+
+        #endregion
         #endregion
     }
 }
